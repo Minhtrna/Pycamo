@@ -1,0 +1,23 @@
+Camo tông tối chủ đề nền rừng.
+
+#221806	Nâu đất tối.
+#162213	Xanh rêu đậm.
+#023C00	Xanh lá cây rừng.
+#1A2F17	Xanh rêu tối.
+#342A10	Nâu đất vàng.
+
+Camo tông trung tính chủ để nền rung.
+
+#2B4938	Xanh lá sáng.
+#162213	Xanh rêu đậm.
+#023C00	Xanh lá cây rừng.
+#1A2F17	Xanh rêu tối.
+#342A10	Nâu đất vàng.
+
+K20 Flecktarn.
+
+#1E3C22 Xanh lá tối tự nhiên.
+#162213	Xanh rêu đậm.
+#04000C	Đen tím sâu. / #020006  đen tím đậm
+#1A2F17	Xanh rêu tối.
+#1D1107	Nâu đất tối.
