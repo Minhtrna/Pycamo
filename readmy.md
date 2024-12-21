@@ -1,1 +1,2 @@
-# Camouflage Pattern Generator
+# Camouflage Pattern Generator 
+base on fractal noise
