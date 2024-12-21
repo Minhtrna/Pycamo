@@ -52,6 +52,6 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0):
     return img
 
 # Example usage:                    replace image path with your own
-color_palette = cp.extract_palette("demo_input/k20r.jpg", num_colors=4)
+color_palette = cp.extract_palette("demo_input/t2.png", num_colors=3)
 generate_pattern(color_palette, "gencamo.png", size=(500, 500), c= 1.4)
 #                            output image name     custom size  C value
