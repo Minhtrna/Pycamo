@@ -31,8 +31,7 @@ def nat_filt_im(size=(), c=2.0):
     filtered = np.real(np.fft.ifft2(np.fft.ifftshift(rand_im_fourier * filter)))
     
     return filtered
-c= 1.5
-def generate_pattern(colors_hex, output_filename, size=()):
+def generate_pattern(colors_hex, output_filename, size=(), c=2.0):
     fp = np.ones((3, 3)).astype(np.uint8)
     
     rgb_colors = [hex2rgb(c.strip()) for c in colors_hex]
@@ -53,6 +52,6 @@ def generate_pattern(colors_hex, output_filename, size=()):
     return img
 
 # Example usage:                    replace image path with your own
-color_palette = cp.extract_palette("demo_input/testimg2.jpg", num_colors=4)
-generate_pattern(color_palette, "gencamo.png", size=(500, 500))
-#                            output image name     custom size
+color_palette = cp.extract_palette("demo_input/k20r.jpg", num_colors=4)
+generate_pattern(color_palette, "gencamo.png", size=(500, 500), c= 1.4)
+#                            output image name     custom size  C value
