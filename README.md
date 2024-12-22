@@ -24,5 +24,12 @@
 ![image](https://github.com/user-attachments/assets/5b6bfb01-764f-4b06-965c-9e2ee07607f6)
 
 
+## How to use?
+#### Clone project and then run the camogen.py file 
+
+![image](https://github.com/user-attachments/assets/5a74f793-41f9-427e-99cb-72dc2f00ef71)
+
+
+
 
 
