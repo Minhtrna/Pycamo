@@ -1,3 +1,10 @@
+# Update
+
+Now you can create a camouflage effect with each color having it's own ratio. The automatically generated camouflage result may not guarantee an even color distribution in every run. When no color ratio was given, the algorithm would randomly inject colors into the image. But now we can give specific ratios for each color like: ratio = [25, 25, 25, 25] (equal ratio for all colors) or ratio = [20, 25, 35, 20] and it will ensure that the result will always have an even color distribution.
+
+![update](https://github.com/user-attachments/assets/d1e1374e-10d7-4de1-855a-18ac6f02e18b)
+
+
 # Camouflage Pattern Generator 
 
 ![Camouflage Pattern Generator](https://github.com/user-attachments/assets/fc3c84c4-ce5c-4c6e-8883-b49da995d693)
