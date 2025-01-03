@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 import warnings
 warnings.filterwarnings('ignore')
 from skimage.filters.rank import modal
+from tkinter import messagebox
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -102,7 +103,7 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
     if ratios is None:
         ratios = [1 / n_colors] * n_colors  # Equal ratio by default
     else:
-        assert len(ratios) == n_colors, "Make sure the number of ratios matches the number of colors"
+        assert len(ratios) == n_colors,  messagebox.showerror("Error", "Please fill color precentages")
         assert np.isclose(sum(ratios), 100), "Ratios must sum to 100%"
         ratios = np.array(ratios) / sum(ratios)  # Normalize ratios to sum to 1
 
@@ -165,7 +166,9 @@ def generate_pattern_from_entries():
     # Default value for entry_Cvalue if empty
     if entry_Cvalue.get() == "":
         entry_Cvalue.insert(0, "1.2")
-    
+    # check if the camo size entry boxes are empty if empty show error message.
+    if entry_size1.get() == "" or entry_size2.get() == "":
+        messagebox.showerror("Error", "Please fill camo size")
     # Generate the pattern
     output_file = os.path.join(OUTPUT_PATH, "Camo.png")
     generate_pattern(colors_hex, output_file, (int(entry_size1.get()), int(entry_size2.get())), c=float(entry_Cvalue.get()), ratios=ratios)
@@ -617,6 +620,36 @@ canvas.create_text(
     fill="#000000",
     font=("Inter", 16 * -1)
 )
+# Update color preview rectangles every 100ms
+def update_colors():
+    fills = []
+    for entry in [entry_Cl1, entry_Cl2, entry_Cl3, entry_Cl4, entry_Cl5]:
+        color = entry.get()
+        if len(color) == 6 and all(c in '0123456789ABCDEFabcdef' for c in color):
+            fills.append("#" + color)
+        else:
+            fills.append("#000000")
+    
+    canvas.itemconfig(rect1, fill=fills[0])
+    canvas.itemconfig(rect2, fill=fills[1])
+    canvas.itemconfig(rect3, fill=fills[2])
+    canvas.itemconfig(rect4, fill=fills[3])
+    canvas.itemconfig(rect5, fill=fills[4])
+    
+    window.after(100, update_colors)
+
+# Create 5 small rectangles to show the color extracted from the image, put the rectangles on right side of the color entry boxes.
+# The color of the rectangles will be the color in the entry boxes.
+rect1 = canvas.create_rectangle(238.0, 368.0, 268.0, 398.0, fill="#000000", outline="")
+rect2 = canvas.create_rectangle(238.0, 418.0, 268.0, 448.0, fill="#000000", outline="")
+rect3 = canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
+rect4 = canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
+rect5 = canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
+
+# Start the update loop
+update_colors()
+
+# Set the window title, icon and size
 window.resizable(False, False)
 myappid = 'tkinter.python.test'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
