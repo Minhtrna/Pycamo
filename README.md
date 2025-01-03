@@ -15,7 +15,7 @@
 
 ## Update
 
-Now you can use Pycamo with a GUI! Unfortunately, building it into an `.exe` file is not currently possible because Windows detects it as a virus 😅. Since I don't fully trust packaging tools, let's keep it simple. Just run `GUI.py` and enjoy.
+Now you can use Pycamo with a GUI!. Just run `GUI.py` and enjoy.
 
 ![Update Screenshot](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
 
