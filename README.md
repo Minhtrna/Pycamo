@@ -1,41 +1,110 @@
-# Update
-
-Now you can use Pycamo with GUI. Cannot build it to exe file, windows say it's a virus :)) i'm not 100% trust any packaging tools so... Let's run GUI.py and enjoy.
-
-![image](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
-
-
-
-# Camouflage Pattern Generator 
+# Camouflage Pattern Generator
 
 ![Camouflage Pattern Generator](https://github.com/user-attachments/assets/fc3c84c4-ce5c-4c6e-8883-b49da995d693)
 
-## How it's work?
+---
 
-#### This camouflage pattern generator base on fractal noise.
+## Table of Contents
+1. [Update](#update)  
+2. [How It Works?](#how-it-works)  
+   - [Extract Colors](#extract-colors)  
+   - [Generate Fractal Noise and fill with colors](#generate-fractal-noise)  
+3. [How to Use](#how-to-use)
 
-### 1. Extract color from image.
+---
 
-![image](https://github.com/user-attachments/assets/5c20d5a4-dee0-44fa-b9ec-ee092a0c42e1)
+## Update
 
-### you can edit the number of color you want to extract by edit the "num_colors" 
-#### ex: color_palette = cp.extract_palette("demo_input/k20r.jpg", num_colors=4) # extract 4 main color from the image.
+Now you can use Pycamo with a GUI! Unfortunately, building it into an `.exe` file is not currently possible because Windows detects it as a virus 😅. Since I don't fully trust packaging tools, let's keep it simple. Just run `GUI.py` and enjoy.
 
-### 2. Generate fractal noise and fill color
+![Update Screenshot](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
 
-#### Fractals are generated randomly within a specified given frame size . 
+---
 
-#### ex : generate_pattern(color_palette, "gencamo.png", size=(500, 500), c= 3).
+## How It Works?
 
-#### The C value will affect the final result. Look the image for better understand.
+This camouflage pattern generator is based on fractal noise. Below is an overview of its working process:
 
-![image](https://github.com/user-attachments/assets/5b6bfb01-764f-4b06-965c-9e2ee07607f6)
+### 1. Extract Colors
+
+The first step involves extracting the main colors from an input image.
+
+![Extract Colors](https://github.com/user-attachments/assets/5c20d5a4-dee0-44fa-b9ec-ee092a0c42e1)
+
+You can customize the number of colors to extract by modifying the `num_colors` parameter. For example:
+
+```python
+color_palette = cp.extract_palette("demo_input/k20r.jpg", num_colors=4)  # Extract 4 main colors
+```
+
+### 2. Generate Fractal Noise
+
+In this step, fractals are randomly generated within a given frame size and filled with the extracted colors. You can control the parameters to customize the final camouflage pattern.
+
+#### Example:
+```python
+generate_pattern(color_palette, "gencamo.png", size=(500, 500), c=3)
+```
+
+![image](https://github.com/user-attachments/assets/145a31ce-73c7-49dc-9cf3-edf13d90b646)
+
+## How to Use
+
+Follow these steps to use the Camouflage Pattern Generator:
+
+### 1. Clone the Project Repository
+Download the project to your local machine using Git:
+
+```bash
+git clone https://github.com/your-repo-link.git
+cd your-repo-folder
+```
+
+Install library
+
+```
+pip install -r requirements.txt
+```
+
+Then you can run Camogen 
+
+```
+python camogen.py
+```
+
+You can edit parameter here 
+
+![image](https://github.com/user-attachments/assets/738b57d9-7767-48c4-982e-c81943b413f1)
+
+| **Parameter**       | **Description**                                                                 |
+|----------------------|---------------------------------------------------------------------------------|
+| `color_palette`      | A list of colors extracted from an image or defined manually.                  |
+| `num_colors`         | The number of colors to extract from the image using the `extract_palette` function. |
+| `ratios`             | A list of percentages defining how much each color should contribute to the pattern. |
+| `size`               | The dimensions of the generated camouflage pattern in pixels (width, height).  |
+| `c`                  | A parameter that controls the complexity of the fractal noise.                 |
+| `ratios=ratios`      | Passes the predefined ratios for each color to the `generate_pattern` function. |
+| `"demo_input/teste3.png"` | The input image file used to extract colors.                                 |
+| `"gencamo.png"`      | The output file name where the generated pattern will be saved.                 |
 
 
-## How to use?
-#### Clone project and then run the camogen.py file 
 
-![image](https://github.com/user-attachments/assets/5a74f793-41f9-427e-99cb-72dc2f00ef71)
+To use GUI instead of command. 
+
+```
+cd to GUI folder
+```
+
+then 
+
+```
+python GUI.py
+```
+
+ENJOY!
+
+![Update Screenshot](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
+
 
 
 
