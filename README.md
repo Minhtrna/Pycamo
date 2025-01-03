@@ -2,7 +2,8 @@
 
 Now you can use Pycamo with GUI. Cannot build it to exe file, windows say it's a virus :)) i'm not 100% trust any packaging tools so... Let's run GUI.py and enjoy.
 
-![image](https://github.com/user-attachments/assets/715ce309-b51c-450f-a709-3390f0306ec2)
+![image](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
+
 
 
 # Camouflage Pattern Generator 
