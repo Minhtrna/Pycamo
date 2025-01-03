@@ -104,7 +104,7 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
         ratios = [1 / n_colors] * n_colors  # Equal ratio by default
     else:
         assert len(ratios) == n_colors,  messagebox.showerror("Error", "Please fill color precentages")
-        assert np.isclose(sum(ratios), 100), "Ratios must sum to 100%"
+        assert np.isclose(sum(ratios), 100), messagebox.showerror("Error", "Sum of color precentages should be 100")
         ratios = np.array(ratios) / sum(ratios)  # Normalize ratios to sum to 1
 
     # Generate initial random noise layers
