@@ -319,8 +319,8 @@ def update_colors():
     
     window.after(100, update_colors)
 
-# Create 5 small rectangles to show the color extracted from the image, put the rectangles on right side of the color entry boxes.
-# The color of the rectangles will be the color in the entry boxes.
+# Create 5 small rectangles to show the color extracted from the image.
+
 rect1 = canvas.create_rectangle(238.0, 368.0, 268.0, 398.0, fill="#000000", outline="")
 rect2 = canvas.create_rectangle(238.0, 418.0, 268.0, 448.0, fill="#000000", outline="")
 rect3 = canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
