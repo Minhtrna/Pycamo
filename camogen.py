@@ -72,7 +72,7 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
     img.save(output_filename)
     return img
 
-# Example usage 
+# Example usage
 # get color from image
 color_palette = cp.extract_palette("demo_input/teste3.png", num_colors=4)
 # custom color palette
