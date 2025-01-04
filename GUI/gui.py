@@ -11,17 +11,157 @@ warnings.filterwarnings('ignore')
 from skimage.filters.rank import modal
 from tkinter import messagebox
 # from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, IntVar, Checkbutton, filedialog
 
 # path
 
 OUTPUT_PATH = Path(__file__).parent.resolve()
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
 
-
+###################### Relative path ######################
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
+
+###################### UI ######################
+# Create the GUI
+window = Tk()
+window.geometry("1280x720")
+window.configure(bg = "#1E2124")
+canvas = Canvas(window,bg = "#1E2124",height = 720,width = 1280,bd = 0,highlightthickness = 0,relief = "ridge")
+canvas.place(x = 0, y = 0)
+###### preview text ######
+canvas.create_text(730.0,28.0,anchor="nw",text="Preview ( Preview window size is 500x500 )",fill="#FFFFFF",font=("Inter", 24 * -1))
+###### parameter text ######
+canvas.create_text(96.0,28.0,anchor="nw",text="Parameter",fill="#FFFFFF",font=("Inter", 24 * -1))
+###### input image canvas ######
+canvas.create_rectangle(10.0,79.0,666.0,653.0,fill="#1E2124",outline="")
+###### ??? ###### :))) auto gen by tkinter designer
+canvas.create_rectangle(15.0,86.0,662.0,649.0,fill="#444B53",outline="")
+###### preview canvas ######
+canvas.create_rectangle(706.0,97.0,1206.0,597.0,fill="#D9D9D9",outline="")
+###### open image button ######
+button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
+button_1 = Button(image=button_image_1,borderwidth=0,highlightthickness=0,command=lambda: load_image(),relief="flat")
+button_1.place(x=316.0,y=91.0,width=212.0,height=67.0)
+###### preview canvas ######
+canvas.create_text(38.0,97.0,anchor="nw",text="Input image",fill="#FFFFFF",font=("Inter", 24 * -1))
+canvas.create_rectangle(38.0,129.0,238.0,329.0,fill="#1E2124",outline="")
+###### save camo button ######
+button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
+button_2 = Button(image=button_image_2,borderwidth=0,highlightthickness=0,command=lambda: save_generated_camo(),relief="flat")
+button_2.place(x=437.0,y=287.0,width=182.0,height=42.0)
+###### generate camo button ######
+button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
+button_3 = Button(image=button_image_3,borderwidth=0,highlightthickness=0,command=lambda: generate_pattern_from_entries(),relief="flat")
+button_3.place(x=246.0,y=287.0,width=183.0,height=42.0)
+###### parameter canvas ######
+canvas.create_rectangle(38.0,342.0,438.0,597.0,fill="#FCFCFC",outline="")
+canvas.create_rectangle(454.0,342.0,652.0,597.0,fill="#FCFCFC",outline="")
+
+############## C value entry box ##############
+entry_image_Cvalue = PhotoImage(file=relative_to_assets("entry_2.png"))
+entry_bg_Cvalue = canvas.create_image(553.0,387.0,image=entry_image_Cvalue)
+entry_Cvalue = Entry(bd=0,bg="#D1D8DE",fg="#000716",highlightthickness=0)
+entry_Cvalue.place(x=466.0,y=372.0,width=174.0,height=28.0)
+
+############## Number of colors entry box ##############
+entry_image_Numcolor = PhotoImage(file=relative_to_assets("entry_4.png"))
+entry_bg_Numcolor = canvas.create_image(336.0,188.0,image=entry_image_Numcolor)
+entry_Numcolor = Entry(bd=0,bg="#FFFFFF",fg="#000716",highlightthickness=0)
+entry_Numcolor.place(x=249.0,y=173.0,width=174.0,height=28.0)
+
+# Group Cl: Color entries
+entry_image_Cl1 = PhotoImage(file=relative_to_assets("entry_1.png"))
+entry_bg_1 = canvas.create_image(137.0, 384.0, image=entry_image_Cl1)
+entry_Cl1 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_Cl1.place(x=50.0, y=369.0, width=174.0, height=28.0)
+
+entry_image_Cl2 = PhotoImage(file=relative_to_assets("entry_5.png"))
+entry_bg_5 = canvas.create_image(137.0, 432.0, image=entry_image_Cl2)
+entry_Cl2 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_Cl2.place(x=50.0, y=417.0, width=174.0, height=28.0)
+
+entry_image_Cl3 = PhotoImage(file=relative_to_assets("entry_7.png"))
+entry_bg_7 = canvas.create_image(137.0, 480.0, image=entry_image_Cl3)
+entry_Cl3 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_Cl3.place(x=50.0, y=465.0, width=174.0, height=28.0)
+
+entry_image_Cl4 = PhotoImage(file=relative_to_assets("entry_9.png"))
+entry_bg_9 = canvas.create_image(137.0, 528.0, image=entry_image_Cl4)
+entry_Cl4 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_Cl4.place(x=50.0, y=513.0, width=174.0, height=28.0)
+
+entry_image_Cl5 = PhotoImage(file=relative_to_assets("entry_11.png"))
+entry_bg_11 = canvas.create_image(139.0, 576.0, image=entry_image_Cl5)
+entry_Cl5 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_Cl5.place(x=52.0, y=561.0, width=174.0, height=28.0)
+
+# Group P: Percent entries
+entry_image_p1 = PhotoImage(file=relative_to_assets("entry_3.png"))
+entry_bg_precent1 = canvas.create_image(373.0, 383.0, image=entry_image_p1)
+entry_p1 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_p1.place(x=338.0, y=368.0, width=70.0, height=28.0)
+
+entry_image_p2 = PhotoImage(file=relative_to_assets("entry_6.png"))
+entry_bg_6 = canvas.create_image(373.0, 431.0, image=entry_image_p2)
+entry_p2 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_p2.place(x=338.0, y=416.0, width=70.0, height=28.0)
+
+entry_image_p3 = PhotoImage(file=relative_to_assets("entry_8.png"))
+entry_bg_8 = canvas.create_image(373.0, 479.0, image=entry_image_p3)
+entry_p3 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_p3.place(x=338.0, y=464.0, width=70.0, height=28.0)
+
+entry_image_p4 = PhotoImage(file=relative_to_assets("entry_10.png"))
+entry_bg_10 = canvas.create_image(373.0, 527.0, image=entry_image_p4)
+entry_p4 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_p4.place(x=338.0, y=512.0, width=70.0, height=28.0)
+
+entry_image_p5 = PhotoImage(file=relative_to_assets("entry_12.png"))
+entry_bg_12 = canvas.create_image(374.0, 575.0, image=entry_image_p5)
+entry_p5 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
+entry_p5.place(x=338.0, y=560.0, width=72.0, height=28.0)
+# create 2 entry boxes for camo size 
+entry_size1 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
+entry_size2 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
+entry_size1.place( x=440.0, y=220.0, width=74.0, height=28.0)
+entry_size2.place( x=336.0, y=220.0, width=74.0, height=28.0)
+canvas.create_text( 418.0, 220.0, anchor="nw", text="x", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_text( 370.0, 250.0, anchor="nw", text="Camo size", fill="#FFFFFF", font=("Inter", 24 * -1))
+###################### Parameter names ######################
+canvas.create_text(52.0,342.0,anchor="nw",text="Color",fill="#000000",font=("Inter", 24 * -1))
+
+canvas.create_text(322.0,341.0,anchor="nw",text="Percent",fill="#000000",font=("Inter", 24 * -1))
+
+canvas.create_text(438.0,173.0,anchor="nw",text="Color extract",fill="#FFFFFF",font=("Inter", 24 * -1))
+
+canvas.create_text(470.0,342.0,anchor="nw",text="C vaule",fill="#000000",font=("Inter", 24 * -1))
+
+canvas.create_text(466.0,409.0,anchor="nw",
+    text="""    C value will 
+    affect the result. 
+    Look github repo 
+    for more information""",fill="#000000",font=("Inter", 16 * -1))
+
+# Create 5 small rectangles to show the color extracted from the image.
+
+rect1 = canvas.create_rectangle(238.0, 368.0, 268.0, 398.0, fill="#000000", outline="")
+rect2 = canvas.create_rectangle(238.0, 418.0, 268.0, 448.0, fill="#000000", outline="")
+rect3 = canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
+rect4 = canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
+rect5 = canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
+
+# Create a check box for pixel style camo
+pixel_style = IntVar()
+pixel_style.set(0)
+check_pixel = Checkbutton(window, text="Pixel style", variable=pixel_style, onvalue=1, offvalue=0)
+check_pixel.place(x=550.0, y=220.0)
+
+##################### Functions Bellow #####################
+
+###### Temp image ######
+current_generated_image = None
+loaded_image = None
 ###################### Color extraction ######################
 def median_cut(pixels, num_colors):
     boxes = [np.array(pixels)]
@@ -140,27 +280,22 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
     img = Image.new("P", size, (0, 0, 0))
     img.putdata(final_map.flatten())
     img.putpalette(palette)
-    img.save(output_filename)
+    if output_filename:  # Only save if filename is provided
+        img.save(output_filename)
     return img
-##### pixel style ####
-def pixelize_image(img, OUTPUT_PATH, pixel_size=10):
+##### pixel camo style ####
+def pixelize_image(current_generated_image, pixel_size=10):
     # Load the image
-    image = Image.open(img).convert("RGB")
-
+    image = current_generated_image
     # Resize the image to a smaller size
     small_image = image.resize(
         (image.width // pixel_size, image.height // pixel_size), Image.NEAREST)
     # Resize back to the original size
     pixelated_image = small_image.resize(image.size, Image.NEAREST)
-
-    # Save the output image
-    pixelated_image.save(OUTPUT_PATH)
     return pixelated_image
 
 ####### Load image #######
 # Load image in to Input image canvas when button_1 is clicked file explorer window should be open to select the image.
-loaded_image = None
-
 def load_image():
     global loaded_image
     # Open file explorer window to select the image
@@ -185,6 +320,8 @@ def load_image():
         entry.insert(0, color)
 # Generate camo pattern from the color entries and save it to the output folder
 def generate_pattern_from_entries():
+    global current_generated_image  # Add this to track current generated image
+    
     # Collect colors from entry boxes, ignoring blank entries
     colors_hex = [entry_Cl1.get(), entry_Cl2.get(), entry_Cl3.get(), entry_Cl4.get(), entry_Cl5.get()]
     colors_hex = [color for color in colors_hex if color]  # Filter out empty color entries
@@ -203,141 +340,43 @@ def generate_pattern_from_entries():
     # check if the camo size entry boxes are empty if empty show error message.
     if entry_size1.get() == "" or entry_size2.get() == "":
         messagebox.showerror("Error", "Please fill camo size")
-    # Generate the pattern
-    output_file = os.path.join(OUTPUT_PATH, "Camo.png")
-    generate_pattern(colors_hex, output_file, (int(entry_size1.get()), int(entry_size2.get())), c=float(entry_Cvalue.get()), ratios=ratios)
+    
+    # Check if the check box is checked if checked pixelize the image and save it to the output folder.
+    if pixel_style.get() == 1:
+        img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
+                         c=float(entry_Cvalue.get()), ratios=ratios)
+        img = pixelize_image(img, 10)
+    else:
+        # Generate the pattern without saving
+        img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
+                         c=float(entry_Cvalue.get()), ratios=ratios)
+    
+
+    current_generated_image = img  # Store the generated image
     
     # Display the generated pattern in the preview canvas
-    img = Image.open(output_file)
-    img = img.resize((500, 500), Image.LANCZOS)
-    img = ImageTk.PhotoImage(img)
-    canvas.create_image(956.0, 347.0, image=img)
-    canvas.image = img
-# Pixelize the image if user want and save it to the output folder
+    display_img = img.resize((500, 500), Image.LANCZOS)
+    photo_img = ImageTk.PhotoImage(display_img)
+    canvas.create_image(956.0, 347.0, image=photo_img)
+    canvas.image = photo_img
 
-# Show output image folder when button_2 is clicked
-def show_output_folder():
-    import os
-    os.system("start %s" % OUTPUT_PATH)
-# Create the GUI
-window = Tk()
-window.geometry("1280x720")
-window.configure(bg = "#1E2124")
-canvas = Canvas(window,bg = "#1E2124",height = 720,width = 1280,bd = 0,highlightthickness = 0,relief = "ridge")
-canvas.place(x = 0, y = 0)
-###### preview text ######
-canvas.create_text(730.0,28.0,anchor="nw",text="Preview ( Preview window size is 500x500 )",fill="#FFFFFF",font=("Inter", 24 * -1))
-###### parameter text ######
-canvas.create_text(96.0,28.0,anchor="nw",text="Parameter",fill="#FFFFFF",font=("Inter", 24 * -1))
-###### input image canvas ######
-canvas.create_rectangle(10.0,79.0,666.0,653.0,fill="#1E2124",outline="")
-###### ??? ###### :))) auto gen by tkinter designer
-canvas.create_rectangle(15.0,86.0,662.0,649.0,fill="#444B53",outline="")
-###### preview canvas ######
-canvas.create_rectangle(706.0,97.0,1206.0,597.0,fill="#D9D9D9",outline="")
-###### open image button ######
-button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
-button_1 = Button(image=button_image_1,borderwidth=0,highlightthickness=0,command=lambda: load_image(),relief="flat")
-button_1.place(x=316.0,y=91.0,width=212.0,height=67.0)
-###### preview canvas ######
-canvas.create_text(38.0,97.0,anchor="nw",text="Input image",fill="#FFFFFF",font=("Inter", 24 * -1))
-canvas.create_rectangle(38.0,129.0,238.0,329.0,fill="#1E2124",outline="")
-###### save camo button ######
-button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
-button_2 = Button(image=button_image_2,borderwidth=0,highlightthickness=0,command=lambda: show_output_folder(),relief="flat")
-button_2.place(x=437.0,y=287.0,width=182.0,height=42.0)
-###### generate camo button ######
-button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
-button_3 = Button(image=button_image_3,borderwidth=0,highlightthickness=0,command=lambda: generate_pattern_from_entries(),relief="flat")
-button_3.place(x=246.0,y=287.0,width=183.0,height=42.0)
-###### parameter canvas ######
-canvas.create_rectangle(38.0,342.0,438.0,597.0,fill="#FCFCFC",outline="")
-canvas.create_rectangle(454.0,342.0,652.0,597.0,fill="#FCFCFC",outline="")
-
-############## C value entry box ##############
-entry_image_Cvalue = PhotoImage(file=relative_to_assets("entry_2.png"))
-entry_bg_Cvalue = canvas.create_image(553.0,387.0,image=entry_image_Cvalue)
-entry_Cvalue = Entry(bd=0,bg="#D1D8DE",fg="#000716",highlightthickness=0)
-entry_Cvalue.place(x=466.0,y=372.0,width=174.0,height=28.0)
-
-############## Number of colors entry box ##############
-entry_image_Numcolor = PhotoImage(file=relative_to_assets("entry_4.png"))
-entry_bg_Numcolor = canvas.create_image(336.0,188.0,image=entry_image_Numcolor)
-entry_Numcolor = Entry(bd=0,bg="#FFFFFF",fg="#000716",highlightthickness=0)
-entry_Numcolor.place(x=249.0,y=173.0,width=174.0,height=28.0)
-
-# Group Cl: Color entries
-entry_image_Cl1 = PhotoImage(file=relative_to_assets("entry_1.png"))
-entry_bg_1 = canvas.create_image(137.0, 384.0, image=entry_image_Cl1)
-entry_Cl1 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_Cl1.place(x=50.0, y=369.0, width=174.0, height=28.0)
-
-entry_image_Cl2 = PhotoImage(file=relative_to_assets("entry_5.png"))
-entry_bg_5 = canvas.create_image(137.0, 432.0, image=entry_image_Cl2)
-entry_Cl2 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_Cl2.place(x=50.0, y=417.0, width=174.0, height=28.0)
-
-entry_image_Cl3 = PhotoImage(file=relative_to_assets("entry_7.png"))
-entry_bg_7 = canvas.create_image(137.0, 480.0, image=entry_image_Cl3)
-entry_Cl3 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_Cl3.place(x=50.0, y=465.0, width=174.0, height=28.0)
-
-entry_image_Cl4 = PhotoImage(file=relative_to_assets("entry_9.png"))
-entry_bg_9 = canvas.create_image(137.0, 528.0, image=entry_image_Cl4)
-entry_Cl4 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_Cl4.place(x=50.0, y=513.0, width=174.0, height=28.0)
-
-entry_image_Cl5 = PhotoImage(file=relative_to_assets("entry_11.png"))
-entry_bg_11 = canvas.create_image(139.0, 576.0, image=entry_image_Cl5)
-entry_Cl5 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_Cl5.place(x=52.0, y=561.0, width=174.0, height=28.0)
-
-# Group P: Percent entries
-entry_image_p1 = PhotoImage(file=relative_to_assets("entry_3.png"))
-entry_bg_precent1 = canvas.create_image(373.0, 383.0, image=entry_image_p1)
-entry_p1 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_p1.place(x=338.0, y=368.0, width=70.0, height=28.0)
-
-entry_image_p2 = PhotoImage(file=relative_to_assets("entry_6.png"))
-entry_bg_6 = canvas.create_image(373.0, 431.0, image=entry_image_p2)
-entry_p2 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_p2.place(x=338.0, y=416.0, width=70.0, height=28.0)
-
-entry_image_p3 = PhotoImage(file=relative_to_assets("entry_8.png"))
-entry_bg_8 = canvas.create_image(373.0, 479.0, image=entry_image_p3)
-entry_p3 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_p3.place(x=338.0, y=464.0, width=70.0, height=28.0)
-
-entry_image_p4 = PhotoImage(file=relative_to_assets("entry_10.png"))
-entry_bg_10 = canvas.create_image(373.0, 527.0, image=entry_image_p4)
-entry_p4 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_p4.place(x=338.0, y=512.0, width=70.0, height=28.0)
-
-entry_image_p5 = PhotoImage(file=relative_to_assets("entry_12.png"))
-entry_bg_12 = canvas.create_image(374.0, 575.0, image=entry_image_p5)
-entry_p5 = Entry(bd=0, bg="#D1D8DE", fg="#000716", highlightthickness=0)
-entry_p5.place(x=338.0, y=560.0, width=72.0, height=28.0)
-# create 2 entry boxes for camo size 
-entry_size1 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
-entry_size2 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
-entry_size1.place( x=440.0, y=220.0, width=74.0, height=28.0)
-entry_size2.place( x=336.0, y=220.0, width=74.0, height=28.0)
-canvas.create_text( 418.0, 220.0, anchor="nw", text="x", fill="#FFFFFF", font=("Inter", 24 * -1))
-canvas.create_text( 370.0, 250.0, anchor="nw", text="Camo size", fill="#FFFFFF", font=("Inter", 24 * -1))
-###################### Parameter names ######################
-canvas.create_text(52.0,342.0,anchor="nw",text="Color",fill="#000000",font=("Inter", 24 * -1))
-
-canvas.create_text(322.0,341.0,anchor="nw",text="Percent",fill="#000000",font=("Inter", 24 * -1))
-
-canvas.create_text(438.0,173.0,anchor="nw",text="Color extract",fill="#FFFFFF",font=("Inter", 24 * -1))
-
-canvas.create_text(470.0,342.0,anchor="nw",text="C vaule",fill="#000000",font=("Inter", 24 * -1))
-
-canvas.create_text(466.0,409.0,anchor="nw",
-    text="""    C value will 
-    affect the result. 
-    Look github repo 
-    for more information""",fill="#000000",font=("Inter", 16 * -1))
+def save_generated_camo():
+    if current_generated_image:
+        # Open file dialog for save location
+        filetypes = [('PNG files', '*.png')]
+        output_file = filedialog.asksaveasfilename(
+            defaultextension='.png',
+            filetypes=filetypes,
+            initialdir=OUTPUT_PATH,
+            title="Save Camo Pattern"
+        )
+        
+        if output_file:  # Check if user didn't cancel
+            try:
+                current_generated_image.save(output_file)
+                messagebox.showinfo("Success", f"Camo pattern saved successfully to:\n{output_file}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save file:\n{str(e)}")
 
 # Update color preview rectangles every 100ms
 def update_colors():
@@ -357,19 +396,11 @@ def update_colors():
     
     window.after(100, update_colors)
 
-# Create 5 small rectangles to show the color extracted from the image.
-
-rect1 = canvas.create_rectangle(238.0, 368.0, 268.0, 398.0, fill="#000000", outline="")
-rect2 = canvas.create_rectangle(238.0, 418.0, 268.0, 448.0, fill="#000000", outline="")
-rect3 = canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
-rect4 = canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
-rect5 = canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
-
-# create check box for pixel style function above
-
-
 # Start the update loop
 update_colors()
+
+
+###################### End of functions part ######################
 
 # Set the window title, icon and size
 window.resizable(False, False)
