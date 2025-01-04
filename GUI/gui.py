@@ -86,11 +86,15 @@ def nat_filt_im(size=(), c=2.0):
     filtered = (filtered - np.min(filtered)) / (np.max(filtered) - np.min(filtered))
 
     return filtered
-
-
+###### Generate camo pattern ######  new algorithm to generate camo pattern now :))
 def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
     fp = np.ones((3, 3)).astype(np.uint8)
-
+    
+    # Filter out colors with zero ratios 
+    if ratios is not None:
+        non_zero_indices = [i for i, r in enumerate(ratios) if r > 0]
+        colors_hex = [colors_hex[i] for i in non_zero_indices]
+        ratios = [ratios[i] for i in non_zero_indices]
     
     rgb_colors = [hex2rgb(c.strip()) for c in colors_hex]
     palette = []
@@ -98,29 +102,61 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None):
         palette += cc
 
     n_colors = len(colors_hex)
-
     
     if ratios is None:
-        ratios = [1 / n_colors] * n_colors  # Equal ratio by default
+        ratios = [1 / n_colors] * n_colors
     else:
-        assert len(ratios) == n_colors,  messagebox.showerror("Error", "Please fill color precentages")
-        assert np.isclose(sum(ratios), 100), messagebox.showerror("Error", "Sum of color precentages should be 100")
-        ratios = np.array(ratios) / sum(ratios)  # Normalize ratios to sum to 1
+        assert len(ratios) == n_colors, messagebox.showerror("Error", "Please fill color percentages")
+        assert np.isclose(sum(ratios), 100), messagebox.showerror("Error", "Sum of color percentages should be 100") 
+        ratios = np.array(ratios) / sum(ratios)
 
-    # Generate initial random noise layers
-    layers = np.array([nat_filt_im(size=size, c=c) * r for r in ratios])
+    # Generate separate noise layers only for non-zero colors
+    noise_layers = [nat_filt_im(size=size, c=c) for _ in range(n_colors)]
+    
+    total_pixels = size[0] * size[1]
+    pixel_counts = np.round(ratios * total_pixels).astype(int)
+    pixel_counts[-1] = total_pixels - np.sum(pixel_counts[:-1])
+    
+    # Create color map
+    color_map = np.zeros(total_pixels, dtype=np.uint8)
+    
+    # Process each layer
+    remaining_indices = set(range(total_pixels))
+    for i, layer in enumerate(noise_layers):
+        if i == n_colors - 1:
+            indices = list(remaining_indices)
+        else:
+            flat_layer = layer.flatten()
+            sorted_indices = np.argsort(flat_layer)
+            valid_indices = [idx for idx in sorted_indices if idx in remaining_indices]
+            indices = valid_indices[-pixel_counts[i]:]
+            
+        remaining_indices -= set(indices)
+        color_map[indices] = i
 
-    # Combine layers by selecting the highest value at each pixel
-    combined_map = np.argmax(layers, axis=0)
-
-    # Apply modal filter for smoothing
-    final_map = modal(combined_map.astype(np.uint8), fp)
-
+    color_map = color_map.reshape(size)
+    final_map = modal(color_map, fp)
+    
     img = Image.new("P", size, (0, 0, 0))
     img.putdata(final_map.flatten())
     img.putpalette(palette)
     img.save(output_filename)
     return img
+##### pixel style ####
+def pixelize_image(img, OUTPUT_PATH, pixel_size=10):
+    # Load the image
+    image = Image.open(img).convert("RGB")
+
+    # Resize the image to a smaller size
+    small_image = image.resize(
+        (image.width // pixel_size, image.height // pixel_size), Image.NEAREST)
+    # Resize back to the original size
+    pixelated_image = small_image.resize(image.size, Image.NEAREST)
+
+    # Save the output image
+    pixelated_image.save(OUTPUT_PATH)
+    return pixelated_image
+
 ####### Load image #######
 # Load image in to Input image canvas when button_1 is clicked file explorer window should be open to select the image.
 loaded_image = None
@@ -147,7 +183,7 @@ def load_image():
         entry = eval(f"entry_Cl{i+1}")
         entry.delete(0, "end")
         entry.insert(0, color)
-
+# Generate camo pattern from the color entries and save it to the output folder
 def generate_pattern_from_entries():
     # Collect colors from entry boxes, ignoring blank entries
     colors_hex = [entry_Cl1.get(), entry_Cl2.get(), entry_Cl3.get(), entry_Cl4.get(), entry_Cl5.get()]
@@ -177,6 +213,8 @@ def generate_pattern_from_entries():
     img = ImageTk.PhotoImage(img)
     canvas.create_image(956.0, 347.0, image=img)
     canvas.image = img
+# Pixelize the image if user want and save it to the output folder
+
 # Show output image folder when button_2 is clicked
 def show_output_folder():
     import os
@@ -326,6 +364,9 @@ rect2 = canvas.create_rectangle(238.0, 418.0, 268.0, 448.0, fill="#000000", outl
 rect3 = canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
 rect4 = canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
 rect5 = canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
+
+# create check box for pixel style function above
+
 
 # Start the update loop
 update_colors()
