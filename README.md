@@ -53,11 +53,9 @@ generate_pattern(color_palette, "gencamo.png", size=(500, 500), c=3)
 Follow these steps to use the Camouflage Pattern Generator:
 
 ### 1. Clone the Project Repository
-Download the project to your local machine using Git:
 
-```bash
-git clone https://github.com/your-repo-link.git
-cd your-repo-folder
+```
+git clone https://github.com/Minhtrna/Pycamo.git
 ```
 
 Install library
