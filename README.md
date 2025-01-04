@@ -15,9 +15,10 @@
 
 ## Update
 
-Now you can use Pycamo with a GUI!. Just run `GUI.py` and enjoy.
+Pycamo can generate pixel camo now! Check the box if u want, also i rewrite file save function and Camo generate algorithm too it better now. ENJOY!!
 
-![Update Screenshot](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
+![image](https://github.com/user-attachments/assets/92b92b3f-5e3c-4bb0-a6df-daa1b24615e5)
+
 
 ---
 
