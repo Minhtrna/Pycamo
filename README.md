@@ -24,11 +24,11 @@ Pycamo can generate pixel camo now! Check the box if u want, also i rewrite file
 
 ## How It Works?
 
-This camouflage pattern generator is based on fractal noise. Below is an overview of its working process:
+This camouflage pattern generator is based on fractal noise.
 
 ### 1. Extract Colors
 
-The first step involves extracting the main colors from an input image.
+The first step is extract main colors from an input image.
 
 ![Extract Colors](https://github.com/user-attachments/assets/5c20d5a4-dee0-44fa-b9ec-ee092a0c42e1)
 
@@ -48,6 +48,11 @@ generate_pattern(color_palette, "gencamo.png", size=(500, 500), c=3)
 ```
 
 ![image](https://github.com/user-attachments/assets/145a31ce-73c7-49dc-9cf3-edf13d90b646)
+
+Pycamo can generate 2 type of digital camo: Fractal and pixel.
+
+![Camouflage Pattern Generator](https://github.com/user-attachments/assets/5b31e80c-5f0b-4117-91ff-eef7f15abc37)
+
 
 ## How to Use
 
@@ -71,7 +76,7 @@ Then you can run Camogen
 python camogen.py
 ```
 
-You can edit parameter here 
+You can edit parameter here (GUI version have different algorithm but parameter still same)
 
 ![image](https://github.com/user-attachments/assets/738b57d9-7767-48c4-982e-c81943b413f1)
 
@@ -91,7 +96,7 @@ You can edit parameter here
 To use GUI instead of command. 
 
 ```
-cd to GUI folder
+go to GUI folder
 ```
 
 then 
@@ -102,7 +107,7 @@ python GUI.py
 
 ENJOY!
 
-![Update Screenshot](https://github.com/user-attachments/assets/615ca98e-bfb3-4392-9003-cc69a1c48d05)
+![image](https://github.com/user-attachments/assets/92b92b3f-5e3c-4bb0-a6df-daa1b24615e5)
 
 
 
