@@ -345,7 +345,7 @@ def generate_pattern_from_entries():
     if pixel_style.get() == 1:
         img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
                          c=float(entry_Cvalue.get()), ratios=ratios)
-        img = pixelize_image(img, 10)
+        img = pixelize_image(img, 5)
     else:
         # Generate the pattern without saving
         img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
