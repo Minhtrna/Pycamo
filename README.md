@@ -76,9 +76,10 @@ Then you can run Camogen
 python camogen.py
 ```
 
-You can edit parameter here (GUI version have different algorithm but parameter still same)
+You can edit parameter here 
 
-![image](https://github.com/user-attachments/assets/738b57d9-7767-48c4-982e-c81943b413f1)
+![image](https://github.com/user-attachments/assets/abfb72ed-600a-47f5-bd3e-28d097804849)
+
 
 | **Parameter**       | **Description**                                                                 |
 |----------------------|---------------------------------------------------------------------------------|
@@ -87,7 +88,8 @@ You can edit parameter here (GUI version have different algorithm but parameter 
 | `ratios`             | A list of percentages defining how much each color should contribute to the pattern. |
 | `size`               | The dimensions of the generated camouflage pattern in pixels (width, height).  |
 | `c`                  | A parameter that controls the complexity of the fractal noise.                 |
-| `ratios=ratios`      | Passes the predefined ratios for each color to the `generate_pattern` function. |
+| `ratios=[]`      | Passes the predefined ratios for each color to the `generate_pattern` function. |
+| `pixelize=True/False`  | Set True to pixelize camo, False for normal fractal. |
 | `"demo_input/teste3.png"` | The input image file used to extract colors.                                 |
 | `"gencamo.png"`      | The output file name where the generated pattern will be saved.                 |
 
