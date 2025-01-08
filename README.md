@@ -17,7 +17,8 @@
 
 Pycamo can generate pixel camo now! Check the box if u want, also i rewrite file save function and Camo generate algorithm too it better now. ENJOY!!
 
-![image](https://github.com/user-attachments/assets/92b92b3f-5e3c-4bb0-a6df-daa1b24615e5)
+![image](https://github.com/user-attachments/assets/94d331a7-c8c4-4b1f-b329-8fa41f07f0c0)
+
 
 
 ---
