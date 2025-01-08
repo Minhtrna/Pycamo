@@ -65,10 +65,10 @@ entry_Cvalue = Entry(bd=0,bg="#D1D8DE",fg="#000716",highlightthickness=0)
 entry_Cvalue.place(x=466.0,y=372.0,width=174.0,height=28.0)
 
 ############## Number of colors entry box ##############
-entry_image_Numcolor = PhotoImage(file=relative_to_assets("entry_4.png"))
-entry_bg_Numcolor = canvas.create_image(336.0,188.0,image=entry_image_Numcolor)
+#entry_image_Numcolor = PhotoImage(file=relative_to_assets("entry_4.png"))
+#entry_bg_Numcolor = canvas.create_image(336.0,188.0,image=entry_image_Numcolor)
 entry_Numcolor = Entry(bd=0,bg="#FFFFFF",fg="#000716",highlightthickness=0)
-entry_Numcolor.place(x=249.0,y=173.0,width=174.0,height=28.0)
+entry_Numcolor.place(x=249.0,y=173.0,width=24.0,height=28.0)
 
 # Group Cl: Color entries
 entry_image_Cl1 = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -124,16 +124,16 @@ entry_p5.place(x=338.0, y=560.0, width=72.0, height=28.0)
 # create 2 entry boxes for camo size 
 entry_size1 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
 entry_size2 = Entry( bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
-entry_size1.place( x=440.0, y=220.0, width=74.0, height=28.0)
-entry_size2.place( x=336.0, y=220.0, width=74.0, height=28.0)
-canvas.create_text( 418.0, 220.0, anchor="nw", text="x", fill="#FFFFFF", font=("Inter", 24 * -1))
-canvas.create_text( 370.0, 250.0, anchor="nw", text="Camo size", fill="#FFFFFF", font=("Inter", 24 * -1))
+entry_size1.place( x=380.0, y=220.0, width=54.0, height=28.0)
+entry_size2.place( x=300.0, y=220.0, width=54.0, height=28.0)
+canvas.create_text( 360.0, 220.0, anchor="nw", text="x", fill="#FFFFFF", font=("Inter", 24 * -1))
+canvas.create_text( 250.0, 220.0, anchor="nw", text="size", fill="#FFFFFF", font=("Inter", 24 * -1))
 ###################### Parameter names ######################
 canvas.create_text(52.0,342.0,anchor="nw",text="Color",fill="#000000",font=("Inter", 24 * -1))
 
 canvas.create_text(322.0,341.0,anchor="nw",text="Percent",fill="#000000",font=("Inter", 24 * -1))
 
-canvas.create_text(438.0,173.0,anchor="nw",text="Color extract",fill="#FFFFFF",font=("Inter", 24 * -1))
+canvas.create_text(280.0,173.0,anchor="nw",text="Color extract",fill="#FFFFFF",font=("Inter", 24 * -1))
 
 canvas.create_text(470.0,342.0,anchor="nw",text="C vaule",fill="#000000",font=("Inter", 24 * -1))
 
@@ -155,7 +155,13 @@ rect5 = canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outl
 pixel_style = IntVar()
 pixel_style.set(0)
 check_pixel = Checkbutton(window, text="Pixel style", variable=pixel_style, onvalue=1, offvalue=0)
-check_pixel.place(x=550.0, y=220.0)
+check_pixel.place(x=550.0, y=180.0)
+
+# create entry for pixel size
+entry_pixel_size = Entry(bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
+entry_pixel_size.place(x=560.0, y=220.0, width=74.0, height=28.0)
+canvas.create_text(450.0, 220.0, anchor="nw", text="Pixel size", fill="#FFFFFF", font=("Inter", 24 * -1))
+
 
 ##################### Functions Bellow #####################
 
@@ -345,7 +351,8 @@ def generate_pattern_from_entries():
     if pixel_style.get() == 1:
         img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
                          c=float(entry_Cvalue.get()), ratios=ratios)
-        img = pixelize_image(img, 5)
+    
+        img = pixelize_image(img, pixel_size=int(entry_pixel_size.get()))
     else:
         # Generate the pattern without saving
         img = generate_pattern(colors_hex, None, (int(entry_size1.get()), int(entry_size2.get())), 
