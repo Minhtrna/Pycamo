@@ -71,11 +71,20 @@ Install library
 pip install -r requirements.txt
 ```
 
-Then you can run Camogen 
+Then you can run Pycamo in ```scr``` folder
 
 ```
-python camogen.py
+python Pycamo.py
 ```
+
+Or
+
+Use Pycamo in other Py program by
+
+```
+import Pycamo
+```
+
 
 You can edit parameter here 
 
