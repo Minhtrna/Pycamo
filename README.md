@@ -79,7 +79,8 @@ python camogen.py
 
 You can edit parameter here 
 
-![image](https://github.com/user-attachments/assets/abfb72ed-600a-47f5-bd3e-28d097804849)
+![image](https://github.com/user-attachments/assets/8af52403-a055-4f43-a4ff-841c4c56eb56)
+
 
 
 | **Parameter**       | **Description**                                                                 |
@@ -91,6 +92,7 @@ You can edit parameter here
 | `c`                  | A parameter that controls the complexity of the fractal noise.                 |
 | `ratios=[]`      | Passes the predefined ratios for each color to the `generate_pattern` function. |
 | `pixelize=True/False`  | Set True to pixelize camo, False for normal fractal. |
+| `pixel_size`  | Set pixel size for pixelize function. |
 | `"demo_input/teste3.png"` | The input image file used to extract colors.                                 |
 | `"gencamo.png"`      | The output file name where the generated pattern will be saved.                 |
 
