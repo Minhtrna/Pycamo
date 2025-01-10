@@ -3,7 +3,37 @@ warnings.filterwarnings('ignore')
 import numpy as np
 from PIL import Image
 from skimage.filters.rank import modal
-import Colorpg as cp
+
+def median_cut(pixels, num_colors):
+    boxes = [np.array(pixels)]
+    while len(boxes) < num_colors:
+        widest_box_index = np.argmax([
+            np.ptp(box, axis=0).max() for box in boxes
+        ])
+        widest_box = boxes.pop(widest_box_index)
+        dominant_dim = np.ptp(widest_box, axis=0).argmax()
+        sorted_box = widest_box[np.argsort(widest_box[:, dominant_dim])]
+        median_index = len(sorted_box) // 2
+        boxes.append(sorted_box[:median_index])
+        boxes.append(sorted_box[median_index:])
+    return boxes
+
+def get_palette(boxes):
+    return [tuple(map(int, np.mean(box, axis=0))) for box in boxes]
+
+def convert_palette_to_hex(palette):
+    return [f"{r:02x}{g:02x}{b:02x}" for r, g, b in palette]
+
+def extract_palette(image_path, num_colors=5):
+    image = Image.open(image_path).convert("RGB")
+    image = image.resize((500, 500))
+    # Convert to pixels
+    pixels = np.array(list(image.getdata()))
+    # Process
+    boxes = median_cut(pixels, num_colors)
+    palette = get_palette(boxes)
+    hex_colors = convert_palette_to_hex(palette)
+    return hex_colors
 
 # Convert hex color to RGB
 def hex2rgb(hex: str):
@@ -109,9 +139,9 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, p
 
 # Example usage
 # get color from image
-pixelize = False # Set to True to pixelize the output image 
-color_palette = cp.extract_palette("demo_input/teste3.png", num_colors=4)
+#pixelize = True # Set to True to pixelize the output image 
+#color_palette = extract_palette("demo_input/teste3.png", num_colors=4)
 # custom color palette
 #color_palette = ['0d011c', '1D1107', '011c07', '012e04']
-ratios = [25, 25, 25, 25]  # Example ratios for each color
-generate_pattern(color_palette, "gencamo.png", size=(1024, 1024), c=1.2, ratios=ratios, pixelize=pixelize)
+#ratios = [25, 25, 25, 25]  # Example ratios for each color
+#generate_pattern(color_palette, "gencamo.png", size=(1024, 1024), c=1.2, ratios=ratios, pixelize=pixelize)
