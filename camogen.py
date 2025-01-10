@@ -137,11 +137,3 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, p
         img.save(output_filename)
     return img
 
-# Example usage
-# get color from image
-#pixelize = True # Set to True to pixelize the output image 
-#color_palette = extract_palette("demo_input/teste3.png", num_colors=4)
-# custom color palette
-#color_palette = ['0d011c', '1D1107', '011c07', '012e04']
-#ratios = [25, 25, 25, 25]  # Example ratios for each color
-#generate_pattern(color_palette, "gencamo.png", size=(1024, 1024), c=1.2, ratios=ratios, pixelize=pixelize)
