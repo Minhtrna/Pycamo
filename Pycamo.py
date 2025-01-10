@@ -76,9 +76,8 @@ def pixelize_image(image, pixel_size=10):
     # Resize back to the original size
     pixelated_image = small_image.resize(image.size, Image.NEAREST)
     return pixelated_image
-pixel_size = 5
-def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, pixelize=False):
-    global pixel_size
+
+def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, pixelize=False, pixel_size=5):
     fp = np.ones((3, 3)).astype(np.uint8)
     
     # Filter out colors with zero ratios 
