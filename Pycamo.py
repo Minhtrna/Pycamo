@@ -76,8 +76,9 @@ def pixelize_image(image, pixel_size=10):
     # Resize back to the original size
     pixelated_image = small_image.resize(image.size, Image.NEAREST)
     return pixelated_image
-
+pixel_size = 5
 def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, pixelize=False):
+    global pixel_size
     fp = np.ones((3, 3)).astype(np.uint8)
     
     # Filter out colors with zero ratios 
@@ -131,7 +132,7 @@ def generate_pattern(colors_hex, output_filename, size=(), c=2.0, ratios=None, p
     img.putdata(final_map.flatten())
     img.putpalette(palette)
     if pixelize is True:
-        img = pixelize_image(img, pixel_size=10)
+        img = pixelize_image(img, pixel_size)
         img.save(output_filename)
     else:
         img.save(output_filename)
