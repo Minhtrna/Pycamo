@@ -1,5 +1,5 @@
 # Example usage
-import Pycamo as pycamo
+import Pycamo as pycamo # import pycamo module when using it in another python file
 # get color from image
 color_palette = pycamo.extract_palette("demo_input/teste3.png", num_colors=4)
 
