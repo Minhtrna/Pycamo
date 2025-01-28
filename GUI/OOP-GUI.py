@@ -197,7 +197,7 @@ class TkinterUI:
 
 
         self.entry_Cl5 = Entry(bd=0, bg="#FFFFFF", fg="#000716", highlightthickness=0)
-        self.entry_Cl5.place(x=52.0, y=561.0, width=174.0, height=28.0)
+        self.entry_Cl5.place(x=50.0, y=561.0, width=174.0, height=28.0)
 
         # Group P: Percent entries
         
