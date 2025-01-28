@@ -405,7 +405,24 @@ class TkinterUI:
         pixelated_image = small_image.resize(image.size, Image.NEAREST)
         return pixelated_image
     def save_generated_camo(self):
-        print("Save generated camo functionality not implemented yet.")
+        if current_generated_image:
+        # Open file dialog for save location
+            filetypes = [('PNG files', '*.png')]
+            save_dir = Path(__file__).parent.resolve()
+            output_file = filedialog.asksaveasfilename(
+                defaultextension='.png',
+                filetypes=filetypes,
+                initialdir=save_dir,
+                title="Save Camo Pattern"
+            )
+            
+            if output_file:  # Check if user didn't cancel
+                try:
+                    current_generated_image.save(output_file)
+                    messagebox.showinfo("Success", f"Camo pattern saved successfully to:\n{output_file}")
+                except Exception as e:
+                    messagebox.showerror("Error", f"Failed to save file:\n{str(e)}")
+
 
     def generate_pattern_from_entries(self):
         global current_generated_image  # Add this to track current generated image
