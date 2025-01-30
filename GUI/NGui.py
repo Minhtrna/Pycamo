@@ -9,6 +9,8 @@ from tkinter import messagebox
 #from tkinter import *
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, IntVar, Checkbutton, filedialog
 import Camologic
+
+
 class AssetsHelper:
     def __init__(self, assets_folder: str):
         self.assets_path = Path(__file__).parent.resolve() / assets_folder
@@ -34,7 +36,7 @@ class TkinterUI:
 
         # Initialize assets helper
         self.assets_helper = AssetsHelper("assets/frame0")
-
+        self.ui_functions = Uifunctions(self)
         # UI Elements
         self._create_ui()
 
@@ -115,7 +117,11 @@ class TkinterUI:
             fill="#FFFFFF", font=("Inter", 16 * -1)
         )
 
-
+        # Input image text
+        self.canvas.create_text(
+            72.0, 90.0, anchor="nw", text="Input Image",
+            fill="#FFFFFF", font=("Inter", 24 * -1)
+        )
         # Pixel style checkbox
         self.pixel_style = IntVar()
         self.pixel_style.set(0)
@@ -130,7 +136,7 @@ class TkinterUI:
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=self.load_image,
+            command=self.ui_functions.load_image,
             relief="flat",
             bg="#1E2124",
             activebackground="#1E2124"
@@ -144,7 +150,7 @@ class TkinterUI:
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=self.save_generated_camo,
+            command=self.ui_functions.save_generated_camo,
             relief="flat",
             bg="#1E2124",
             activebackground="#1E2124"
@@ -158,7 +164,7 @@ class TkinterUI:
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=self.generate_pattern_from_entries,
+            command=self.ui_functions.generate_pattern_from_entries,
             relief="flat",
             bg="#1E2124",
             activebackground="#1E2124"
@@ -237,6 +243,16 @@ class TkinterUI:
         self.rect4 = self.canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
         self.rect5 = self.canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
 
+class Uifunctions:
+    def __init__(self, ui_instance):
+        
+        # Store TkinterUI instance directly
+        self.ui = ui_instance
+        # Get canvas reference from UI instance
+        self.canvas = self.ui.canvas
+        self.current_generated_image = None
+        
+
     def load_image(self):
         global loaded_image
         # Open file explorer window to select the image
@@ -249,26 +265,27 @@ class TkinterUI:
         self.canvas.create_image(138.0, 229.0, image=loaded_image)
         self.canvas.image = loaded_image
         # Extract color palette, use number of colors extracted as the number of colors in entry_Numcolor if it is empty use 5 as default.
-        if self.entry_Numcolor.get() == "":
+        if self.ui.entry_Numcolor.get() == "":
             num_colors = 5
         else:
-            num_colors = int(self.entry_Numcolor.get())
+            num_colors = int(self.ui.entry_Numcolor.get())
         colors_hex = Camologic.extract_palette(file_path, num_colors)
         # fill the extracted colors in the color entry boxes.
         # clear the entry boxes first to avoid appending to the existing colors.
-        for entry in [self.entry_Cl1, self.entry_Cl2, self.entry_Cl3, self.entry_Cl4, self.entry_Cl5]:
+        for entry in [self.ui.entry_Cl1, self.ui.entry_Cl2, self.ui.entry_Cl3, self.ui.entry_Cl4, self.ui.entry_Cl5]:
             entry.delete(0, "end")
         for i, color in enumerate(colors_hex):
             self.canvas.itemconfig(f"rect{i+1}", fill=color)
-            entry = [self.entry_Cl1, self.entry_Cl2, self.entry_Cl3, self.entry_Cl4, self.entry_Cl5][i]
+            entry = [self.ui.entry_Cl1, self.ui.entry_Cl2, self.ui.entry_Cl3, self.ui.entry_Cl4, self.ui.entry_Cl5][i]
             entry.insert(0, color)
             
 
     def generate_pattern_from_entries(self):
         global current_generated_image
-
+        
+        colors_hex = []
         # Collect colors from entry boxes, ignoring blank entries
-        colors_hex = [self.entry_Cl1.get(), self.entry_Cl2.get(), self.entry_Cl3.get(), self.entry_Cl4.get(), self.entry_Cl5.get()]
+        colors_hex = [self.ui.entry_Cl1.get(), self.ui.entry_Cl2.get(), self.ui.entry_Cl3.get(), self.ui.entry_Cl4.get(), self.ui.entry_Cl5.get()]
         colors_hex = [color for color in colors_hex if color]
 
         # Check if we have any colors before proceeding
@@ -277,50 +294,48 @@ class TkinterUI:
             return
 
         # Collect ratios from entry boxes
-        ratio_entries = [self.entry_p1, self.entry_p2, self.entry_p3, self.entry_p4, self.entry_p5]
+        ratio_entries = [self.ui.entry_p1, self.ui.entry_p2, self.ui.entry_p3, self.ui.entry_p4, self.ui.entry_p5]
         ratios = []
-        
-        # Check if any ratios are entered
         for i in range(len(colors_hex)):
-            ratio = ratio_entries[i].get()
-            if ratio:
-                try:
-                    ratios.append(float(ratio))
-                except ValueError:
-                    messagebox.showerror("Error", f"Invalid ratio value: {ratio}")
-                    return
-
+            ratio_str = ratio_entries[i].get()
+            if ratio_str:
+                ratios.append(float(ratio_str))
+            else:
+                ratios.append(0.0)
         # Auto-fill empty ratios if needed
-        if not ratios:
-            equal_ratio = round(100.0 / len(colors_hex), 4) # round < 4 decimal places will not enough due to float precision.
+        if sum(ratios) != 100:
+            # Clear the entry boxes first to avoid appending to the existing ratios
+            for entry in ratio_entries:
+                entry.delete(0, "end")
+
+            # Auto-fill ratios
+            equal_ratio = round(100.0 / len(colors_hex), 4)
+            ratios = []
             for i in range(len(colors_hex)):
-                ratio_entries[i].delete(0, 'end')
                 ratio_entries[i].insert(0, str(equal_ratio))
                 ratios.append(equal_ratio)
-
-            else:
-                ratios = [float(r) for r in ratios]
-            
+            messagebox.showinfo("Info", "Ratios auto-filled to balance 100%")
+                
             
         # Default value for entry_Cvalue if empty
-        if self.entry_Cvalue.get() == "":
-            self.entry_Cvalue.insert(0, "1.2")
+        if self.ui.entry_Cvalue.get() == "":
+            self.ui.entry_Cvalue.insert(0, "1.2")
         # check if the camo size entry boxes are empty if empty show error message.
-        if self.entry_size1.get() == "" or self.entry_size2.get() == "":
+        if self.ui.entry_size1.get() == "" or self.ui.entry_size2.get() == "":
             messagebox.showerror("Error", "Please fill camo size")
         
         # Check if the check box is checked if checked pixelize the image and save it to the output folder.
-        if self.pixel_style.get() == 1:
-            img = Camologic.generate_pattern(colors_hex, None, (int(self.entry_size1.get()), int(self.entry_size2.get())), 
-                            c=float(self.entry_Cvalue.get()), ratios=ratios)
-            if self.entry_pixel_size.get() == "":
+        if self.ui.pixel_style.get() == 1:
+            img = Camologic.generate_pattern(colors_hex, None, (int(self.ui.entry_size1.get()), int(self.ui.entry_size2.get())), 
+                            c=float(self.ui.entry_Cvalue.get()), ratios=ratios)
+            if self.ui.entry_pixel_size.get() == "":
                 messagebox.showerror("Error", "Please fill pixel size")
             else: 
-                img = Camologic.pixelize_image(img, pixel_size=int(self.entry_pixel_size.get()))  
+                img = Camologic.pixelize_image(img, pixel_size=int(self.ui.entry_pixel_size.get()))  
         else:
             # Generate the pattern without saving
-            img = Camologic.generate_pattern(colors_hex, None, (int(self.entry_size1.get()), int(self.entry_size2.get())), 
-                            c=float(self.entry_Cvalue.get()), ratios=ratios)
+            img = Camologic.generate_pattern(colors_hex, None, (int(self.ui.entry_size1.get()), int(self.ui.entry_size2.get())), 
+                            c=float(self.ui.entry_Cvalue.get()), ratios=ratios)
         
 
         current_generated_image = img  # Store the generated image
