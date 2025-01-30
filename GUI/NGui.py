@@ -238,43 +238,70 @@ class TkinterUI:
         self.rect5 = self.canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
 
     def load_image(self):
-            global loaded_image
-            # Open file explorer window to select the image
-            from tkinter import filedialog
-            file_path = filedialog.askopenfilename()
-            # display the image in the Input image canvas
-            img = Image.open(file_path)
-            img = img.resize((200, 200), Image.LANCZOS)
-            loaded_image = ImageTk.PhotoImage(img)
-            self.canvas.create_image(138.0, 229.0, image=loaded_image)
-            self.canvas.image = loaded_image
-            # Extract color palette, use number of colors extracted as the number of colors in entry_Numcolor if it is empty use 5 as default.
-            if self.entry_Numcolor.get() == "":
-                num_colors = 5
-            else:
-                num_colors = int(self.entry_Numcolor.get())
-            colors_hex = Camologic.extract_palette(file_path, num_colors)
-            # fill the extracted colors in the color entry boxes.
-            for i, color in enumerate(colors_hex):
-                entry = eval(f"self.entry_Cl{i+1}")
-                entry.delete(0, "end")
-                entry.insert(0, color)
+        global loaded_image
+        # Open file explorer window to select the image
+        from tkinter import filedialog
+        file_path = filedialog.askopenfilename()
+        # display the image in the Input image canvas
+        img = Image.open(file_path)
+        img = img.resize((200, 200), Image.LANCZOS)
+        loaded_image = ImageTk.PhotoImage(img)
+        self.canvas.create_image(138.0, 229.0, image=loaded_image)
+        self.canvas.image = loaded_image
+        # Extract color palette, use number of colors extracted as the number of colors in entry_Numcolor if it is empty use 5 as default.
+        if self.entry_Numcolor.get() == "":
+            num_colors = 5
+        else:
+            num_colors = int(self.entry_Numcolor.get())
+        colors_hex = Camologic.extract_palette(file_path, num_colors)
+        # fill the extracted colors in the color entry boxes.
+        # clear the entry boxes first to avoid appending to the existing colors.
+        for entry in [self.entry_Cl1, self.entry_Cl2, self.entry_Cl3, self.entry_Cl4, self.entry_Cl5]:
+            entry.delete(0, "end")
+        for i, color in enumerate(colors_hex):
+            self.canvas.itemconfig(f"rect{i+1}", fill=color)
+            entry = [self.entry_Cl1, self.entry_Cl2, self.entry_Cl3, self.entry_Cl4, self.entry_Cl5][i]
+            entry.insert(0, color)
+            
 
     def generate_pattern_from_entries(self):
-        global current_generated_image  # Add this to track current generated image
-    
+        global current_generated_image
+
         # Collect colors from entry boxes, ignoring blank entries
         colors_hex = [self.entry_Cl1.get(), self.entry_Cl2.get(), self.entry_Cl3.get(), self.entry_Cl4.get(), self.entry_Cl5.get()]
-        colors_hex = [color for color in colors_hex if color]  # Filter out empty color entries
-        
+        colors_hex = [color for color in colors_hex if color]
+
+        # Check if we have any colors before proceeding
+        if not colors_hex:
+            messagebox.showerror("Error", "Please enter at least one color")
+            return
+
         # Collect ratios from entry boxes
-        ratios = [self.entry_p1.get(), self.entry_p2.get(), self.entry_p3.get(), self.entry_p4.get(), self.entry_p5.get()]
-        ratios = [float(r) for r in ratios if r]  # Filter out empty ratio entries
-        if "" in ratios:
-            ratios = None
-        else:
-            ratios = [float(r) for r in ratios]
+        ratio_entries = [self.entry_p1, self.entry_p2, self.entry_p3, self.entry_p4, self.entry_p5]
+        ratios = []
         
+        # Check if any ratios are entered
+        for i in range(len(colors_hex)):
+            ratio = ratio_entries[i].get()
+            if ratio:
+                try:
+                    ratios.append(float(ratio))
+                except ValueError:
+                    messagebox.showerror("Error", f"Invalid ratio value: {ratio}")
+                    return
+
+        # Auto-fill empty ratios if needed
+        if not ratios:
+            equal_ratio = round(100.0 / len(colors_hex), 4) # round < 4 decimal places will not enough due to float precision.
+            for i in range(len(colors_hex)):
+                ratio_entries[i].delete(0, 'end')
+                ratio_entries[i].insert(0, str(equal_ratio))
+                ratios.append(equal_ratio)
+
+            else:
+                ratios = [float(r) for r in ratios]
+            
+            
         # Default value for entry_Cvalue if empty
         if self.entry_Cvalue.get() == "":
             self.entry_Cvalue.insert(0, "1.2")
