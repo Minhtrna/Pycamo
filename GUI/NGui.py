@@ -10,13 +10,13 @@ from tkinter import messagebox
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, IntVar, Checkbutton, filedialog
 import Camologic
 
-
+# Assets helper class to load images from the assets folder.
 class AssetsHelper:
     def __init__(self, assets_folder: str):
         self.assets_path = Path(__file__).parent.resolve() / assets_folder
     def get_asset_path(self, filename: str) -> Path:
         return self.assets_path / filename
-
+# This class contains the UI elements.
 class TkinterUI:
     def __init__(self, root):
         self.root = root
@@ -242,7 +242,7 @@ class TkinterUI:
         self.rect3 = self.canvas.create_rectangle(238.0, 464.0, 268.0, 494.0, fill="#000000", outline="")
         self.rect4 = self.canvas.create_rectangle(238.0, 512.0, 268.0, 542.0, fill="#000000", outline="")
         self.rect5 = self.canvas.create_rectangle(238.0, 560.0, 268.0, 590.0, fill="#000000", outline="")
-
+# This class contains the function for UI.
 class Uifunctions:
     def __init__(self, ui_instance):
         
