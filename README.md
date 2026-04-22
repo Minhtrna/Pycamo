@@ -15,9 +15,17 @@
 
 ## Update
 
-Pycamo can generate pixel camo now! Check the box if u want, also i rewrite file save function and Camo generate algorithm too it better now. ENJOY!!
+I'm working on new update which expected to bring us the ability to create Multicam like camo pattern. On the last success i was be able to create organic shape without the need for hand drawing.
 
-![image](https://github.com/user-attachments/assets/94d331a7-c8c4-4b1f-b329-8fa41f07f0c0)
+<img width="1949" height="985" alt="image" src="https://github.com/user-attachments/assets/03cbe0bb-4306-470d-9950-fabed27571c7" />
+
+<img width="2447" height="985" alt="image" src="https://github.com/user-attachments/assets/f1f0d505-fdad-4bb8-bc2b-5cbad92751b7" />
+
+For how it work. The pattern generator system work by using the base fractal noise as we known are really good at create organic shape, so i put a controllable mask on it and add some parameter to have more control. The result is a controllable organic shape generattor
+
+<img width="1602" height="1083" alt="image" src="https://github.com/user-attachments/assets/8e67647d-8b00-4056-b050-768a98dcbc40" />
+
+
 
 
 
